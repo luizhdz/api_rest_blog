@@ -1,26 +1,22 @@
-const express = require('express');
-const mongoose = require('mongoose');
+var express = require("express");
+var app = express();
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
+var port = process.env.PORT || 4000;
 
-// set up our express app
-const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// connect to mongodb
-mongoose.connect('mongodb://127.0.0.1:27017/blog');
-mongoose.Promise = global.Promise;
-
-app.use(express.static('public'));
-
-app.use(express.json());
-// initialize routes
-app.use('/api',require('./routes/api'));
-
-// error handling middleware
-app.use(function(err,req,res,next){
-    //console.log(err);
-    res.status(422).send({error: err.message});
+mongoose.connect("mongodb://127.0.0.1:27017/blogs", function (err, res) {
+  if (err) {
+    console.log("ERROR: connecting to Database. " + err);
+  } else {
+    console.log("Connected to Database");
+  }
 });
 
-// listen for requests
-app.listen(process.env.port || 4000, function(){
-    console.log('Ready to Go!');
-});
+var router = require("./routes/api");
+app.use("/api", router);
+
+app.listen(port);
+console.log("API escuchando en el puerto " + port);
