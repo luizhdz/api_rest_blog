@@ -1,21 +1,44 @@
 const express = require("express");
 const router = express.Router();
-const Blog = require("../models/blog");
+const Blog = require("../models/blog.js");
 
 router.get("/blogs", function (req, res) {
-  Blog.find({})
-    .then(function (blogs) {
+  console.log("GET: ")
+  Blog.find(function(err, blogs) {
+    if(!err) {
+      console.log('GET /blogs')
       res.send(blogs);
-    })
-    .catch(next);
+    } else {
+      console.log('ERROR: ' + err);
+    }
+  });
 });
 
 router.post("/blogs", function (req, res) {
-  Blog.create(req.body)
-    .then(function (blog) {
-      res.send(blog);
-    })
-    .catch(next);
+  console.log('POST');
+  console.log(req.body);
+
+  try {
+    var blog = new Blog({
+      title:    req.body.title,
+      autor:    req.body.autor,
+      content:    req.body.content,
+    });
+  
+    blog.save(function(err) {
+      if(!err) {
+        console.log('Created');
+      } else {
+        console.log('ERROR: ' + err);
+      }
+    });
+  
+    res.send(blog);
+  } catch (error) {
+    console.log("Error:" , error)
+  }
+  
+
 });
 
 router.put("/blogs/:id", function (req, res) {
