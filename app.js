@@ -1,20 +1,26 @@
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
-var methodOverride = require("method-override");
+const express = require('express');
+const mongoose = require('mongoose');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(methodOverride());
+// set up our express app
+const app = express();
 
-var router = express.Router();
+// connect to mongodb
+mongoose.connect('mongodb://127.0.0.1:27017/blog');
+mongoose.Promise = global.Promise;
 
-router.get("/", function (req, res) {
-  res.send("Hello World!");
+app.use(express.static('public'));
+
+app.use(express.json());
+// initialize routes
+app.use('/api',require('./routes/api'));
+
+// error handling middleware
+app.use(function(err,req,res,next){
+    //console.log(err);
+    res.status(422).send({error: err.message});
 });
 
-app.use(router);
-
-app.listen(3000, function () {
-  console.log("Node server running on http://localhost:3000");
+// listen for requests
+app.listen(process.env.port || 4000, function(){
+    console.log('Ready to Go!');
 });
