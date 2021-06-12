@@ -61,7 +61,7 @@ exports.deleteBlog = function (req, res) {
   Blog.findById(req.params.id, function (err, blog) {
     blog.remove(function (err) {
       if (err) return res.status(500).send(err.message);
-      res.status(200).send();
+      res.status(200).send({message: "blog deleted"});
     });
   });
 };
