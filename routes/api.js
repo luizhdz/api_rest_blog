@@ -1,14 +1,28 @@
 const express = require("express");
-const blog = express.Router();
-var BlogsController = require('../controllers/blogs.js');
+const router = express.Router();
+var BlogsController = require("../controllers/blogs.js");
+var CategoriesController = require("../controllers/categories.js");
 
-blog.route("/blogs")
+router
+  .route("/blogs")
   .get(BlogsController.findAllBlogs)
   .post(BlogsController.createBlogs);
 
-blog.route('/blogs/:id')
+router
+  .route("/blogs/:id")
   .get(BlogsController.findById)
   .put(BlogsController.updateBlogs)
   .delete(BlogsController.deleteBlog);
 
-module.exports = blog;
+router
+  .route("/categories")
+  .get(CategoriesController.findAllCategories)
+  .post(CategoriesController.createCategory);
+
+router
+  .route("/categories/:id")
+  .get(CategoriesController.findById)
+  .put(CategoriesController.updateCategory)
+  .delete(CategoriesController.deleteCategory);
+
+module.exports = router;
