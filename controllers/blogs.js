@@ -28,6 +28,7 @@ exports.createBlogs = function (req, res) {
       title: req.body.title,
       autor: req.body.autor,
       content: req.body.content,
+      category: req.body.category
     });
 
     blog.save(function (err) {
@@ -49,6 +50,7 @@ exports.updateBlogs = function (req, res) {
     blog.title = req.body.title;
     blog.autor = req.body.autor;
     blog.content = req.body.content;
+    blog.category = req.body.category;
 
     blog.save(function (err) {
       if (err) return res.status(500).send(err.message);
