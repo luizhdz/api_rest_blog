@@ -29,8 +29,12 @@ mongoose.connect("mongodb://127.0.0.1:27017/blogs", function (err, res) {
   }
 });
 
-var router = require("./routes/api");
-app.use("/api", router);
+var blogs = require("./routes/api");
+var auth = require("./routes/auth");
+var verifyToken = require('./routes/validate-token');
+
+app.use("/auth", auth);
+app.use("/api", verifyToken, blogs);
 
 app.listen(port);
 console.log("API escuchando en el puerto " + port);
